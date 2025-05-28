@@ -19,6 +19,8 @@ from functools import wraps
 from flask_wtf import CSRFProtect # For CSRF Protection
 from flask_wtf.file import FileField, FileRequired, FileAllowed # For form file validation (optional here as we do it manually)
 
+import numpy as np
+from tensorflow.keras.models import load_model
 
 # --- Configuration ---
 load_dotenv(dotenv_path="mongo_cred.env")
@@ -56,18 +58,18 @@ users_collection = db['users']
 medicines_collection = db['medicines']
 predictions_collection = db['predictions'] # For prediction history
 
-# Load the pre-trained model
-MODEL_PATH = 'model.pkl'
-loaded_model = None
-if os.path.exists(MODEL_PATH):
-    try:
-        with open(MODEL_PATH, 'rb') as file:
-            loaded_model = pickle.load(file)
-        print("Model loaded successfully.")
-    except Exception as e:
-        print(f"Error loading model.pkl: {e}")
-else:
-    print(f"Warning: {MODEL_PATH} not found. Prediction functionality will be unavailable.")
+# # Load the pre-trained model
+# MODEL_PATH = 'model.pkl'
+# loaded_model = None
+# if os.path.exists(MODEL_PATH):
+#     try:
+#         with open(MODEL_PATH, 'rb') as file:
+#             loaded_model = pickle.load(file)
+#         print("Model loaded successfully.")
+#     except Exception as e:
+#         print(f"Error loading model.pkl: {e}")
+# else:
+#     print(f"Warning: {MODEL_PATH} not found. Prediction functionality will be unavailable.")
 
 
 # --- Helper Functions ---
@@ -75,19 +77,34 @@ def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
+MODEL_PATH = 'CNN_Classification_1.h5'
+loaded_model = None
+
+if os.path.exists(MODEL_PATH):
+    try:
+        loaded_model = load_model(MODEL_PATH)
+        print("Model loaded successfully from .h5 file.")
+    except Exception as e:
+        print(f"Error loading {MODEL_PATH}: {e}")
+else:
+    print(f"Warning: {MODEL_PATH} not found. Prediction functionality will be unavailable.")
+
+
 def preprocess_image(image_path):
     try:
-        img = cv2.imread(image_path)
+        img = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)  # model expects grayscale input
         if img is None:
             print(f"Warning: Could not read image at {image_path}")
             return None
-        img = cv2.resize(img, (224, 224)) # Ensure this matches your model's input size
+        img = cv2.resize(img, (224, 224))  # match model input size
         img = img.astype('float32') / 255.0
-        img = np.expand_dims(img, axis=0)
+        img = np.expand_dims(img, axis=-1)  # shape: (224, 224, 1)
+        img = np.expand_dims(img, axis=0)   # shape: (1, 224, 224, 1)
         return img
     except Exception as e:
         print(f"Error preprocessing image {image_path}: {e}")
         return None
+
 
 def predict_image_class(image_path):
     if loaded_model is None:
@@ -97,20 +114,18 @@ def predict_image_class(image_path):
     processed_img = preprocess_image(image_path)
     if processed_img is None:
         return None, None
-    
+
     try:
         prediction = loaded_model.predict(processed_img)
-        # Assuming model outputs probability for Pneumonia (class 1)
-        # Adjust this based on your model's output structure
-        raw_confidence = float(prediction[0][0]) 
-        
-        if raw_confidence > 0.5: # Threshold for Pneumonia
+        raw_confidence = float(prediction[0][0])  # sigmoid output
+
+        if raw_confidence > 0.5:
             predicted_class_label = "Pneumonia"
             display_confidence = raw_confidence
         else:
             predicted_class_label = "Normal"
-            display_confidence = 1.0 - raw_confidence # Confidence for being Normal
-            
+            display_confidence = 1.0 - raw_confidence
+
         return predicted_class_label, display_confidence
     except Exception as e:
         print(f"Error during model prediction: {e}")

@@ -7,3 +7,4 @@ Werkzeug
 Flask-WTF # For CSRF protection and forms
 keras
 tensorflow
+gunicorn

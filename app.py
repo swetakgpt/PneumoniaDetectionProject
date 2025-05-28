@@ -96,10 +96,9 @@ def preprocess_image(image_path):
         if img is None:
             print(f"Warning: Could not read image at {image_path}")
             return None
-        img = cv2.resize(img, (224, 224))  # match model input size
+        img = cv2.resize(img, (64, 64))  # match model input size
         img = img.astype('float32') / 255.0
-        img = np.expand_dims(img, axis=-1)  # shape: (224, 224, 1)
-        img = np.expand_dims(img, axis=0)   # shape: (1, 224, 224, 1)
+        img = np.expand_dims(img, axis=(0, -1))  # Shape: (1, 64, 64, 1)
         return img
     except Exception as e:
         print(f"Error preprocessing image {image_path}: {e}")

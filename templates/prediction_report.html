@@ -1,0 +1,46 @@
+{% extends "base_layout.html" %}
+{% block title %}Prediction History | {{ super() }}{% endblock %}
+
+{% block content %}
+<div class="container mt-5 mb-5 flex-grow-1">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="page-title mb-0" style="text-align: left;">Your Prediction History</h1>
+        <a href="{{ url_for('predict_scan') }}" class="btn btn-theme btn-theme-primary"><i class="fas fa-lungs-virus mr-2"></i>New Prediction</a>
+    </div>
+    
+    {% if history and history|length > 0 %}
+    <div class="table-responsive styled-card" style="padding: 20px;">
+        <table class="table table-hover table-custom mb-0">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Date</th>
+                    <th scope="col">Original Filename</th>
+                    <th scope="col">Result</th>
+                    <th scope="col">Confidence</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in history %}
+                <tr>
+                    <th scope="row">{{ loop.index }}</th>
+                    <td>{{ item.predicted_at.strftime('%Y-%m-%d %H:%M:%S') if item.predicted_at else 'N/A' }} UTC</td>
+                    <td>{{ item.original_filename }}</td>
+                    <td class="font-weight-bold {% if item.prediction_result == 'Pneumonia' %}text-danger{% elif item.prediction_result == 'Normal' %}text-success{% endif %}">
+                        {{ item.prediction_result }}
+                    </td>
+                    <td>{{ "%.2f%%"|format(item.confidence * 100) if item.confidence is not none else 'N/A' }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="styled-card text-center">
+        <i class="fas fa-history fa-3x text-muted-custom mb-3"></i>
+        <p class="text-muted-custom" style="font-size: 1.1rem;">You have no prediction history yet.</p>
+        <a href="{{ url_for('predict_scan') }}" class="btn btn-theme btn-theme-primary mt-3"><i class="fas fa-cloud-upload-alt mr-2"></i>Make Your First Prediction</a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,51 @@
+{% extends "base_layout.html" %}
+{% block title %}Login | {{ super() }}{% endblock %}
+
+{% block content %}
+<div class="content-wrapper">
+    <div class="styled-card">
+        <h2 class="card-title-custom">User Login</h2>
+        <form method="post" action="{{ url_for('login', next=request.args.get('next')) }}" class="mt-4 needs-validation" novalidate>
+            {# CSRF Token Fix #}
+            {% set raw_csrf_token_value = csrf_token() %}
+            <input type="hidden" name="csrf_token" value="{{ raw_csrf_token_value }}">
+            
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" class="form-control" placeholder="Enter your username" required>
+                <div class="invalid-feedback">Please enter your username.</div>
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" class="form-control" placeholder="Enter your password" required>
+                <div class="invalid-feedback">Please enter your password.</div>
+            </div>
+            <button type="submit" class="btn btn-theme btn-theme-primary btn-block mt-4">Login</button>
+        </form>
+        <p class="text-center mt-4 text-muted-custom">
+            Don't have an account? <a href="{{ url_for('register') }}">Register here</a>
+        </p>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts_extra %}
+<script>
+// Bootstrap form validation script
+(function() {
+  'use strict';
+  window.addEventListener('load', function() {
+    var forms = document.getElementsByClassName('needs-validation');
+    Array.prototype.filter.call(forms, function(form) {
+      form.addEventListener('submit', function(event) {
+        if (form.checkValidity() === false) {
+          event.preventDefault();
+          event.stopPropagation();
+        }
+        form.classList.add('was-validated');
+      }, false);
+    });
+  }, false);
+})();
+</script>
+{% endblock %}

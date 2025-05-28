@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Pneumonia Detection System{% endblock %}</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+    {% block head_extra %}{% endblock %}
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light navbar-custom sticky-top">
+        <div class="container">
+            <a class="navbar-brand navbar-brand-custom" href="{{ url_for('home') }}">Pneumo<span class="highlight">Detect</span></a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    {% if current_user_info %}
+                        <li class="nav-item {% if request.endpoint == 'dashboard' %}active{% endif %}">
+                            <a class="nav-link nav-link-custom" href="{{ url_for('dashboard') }}">Dashboard</a>
+                        </li>
+                        <li class="nav-item {% if request.endpoint == 'predict_scan' %}active{% endif %}">
+                            <a class="nav-link nav-link-custom" href="{{ url_for('predict_scan') }}">Predict Scan</a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link nav-link-custom dropdown-toggle" href="#" id="navbarDropdownReminders" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Reminders
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdownReminders">
+                                <a class="dropdown-item {% if request.endpoint == 'add_medicine' %}active{% endif %}" href="{{ url_for('add_medicine') }}">Add Medicine</a>
+                                <a class="dropdown-item {% if request.endpoint == 'medicine_report' %}active{% endif %}" href="{{ url_for('medicine_report') }}">View Report</a>
+                            </div>
+                        </li>
+                         <li class="nav-item {% if request.endpoint == 'prediction_history' %}active{% endif %}">
+                            <a class="nav-link nav-link-custom" href="{{ url_for('prediction_history') }}">History</a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link nav-link-custom dropdown-toggle" href="#" id="navbarDropdownUser" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fas fa-user-circle mr-1"></i> {{ current_user_info.displayName or current_user_info.username }}
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownUser">
+                                <a class="dropdown-item {% if request.endpoint == 'profile' %}active{% endif %}" href="{{ url_for('profile') }}">Profile</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="{{ url_for('logout') }}">Logout</a>
+                            </div>
+                        </li>
+                    {% else %}
+                        <li class="nav-item {% if request.endpoint == 'home' %}active{% endif %}">
+                            <a class="nav-link nav-link-custom" href="{{ url_for('home') }}">Home</a>
+                        </li>
+                        <li class="nav-item {% if request.endpoint == 'login' %}active{% endif %}">
+                            <a class="nav-link nav-link-custom" href="{{ url_for('login') }}">Login</a>
+                        </li>
+                        <li class="nav-item {% if request.endpoint == 'register' %}active{% endif %}">
+                            <a class="nav-link nav-link-custom" href="{{ url_for('register') }}">Register</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <main role="main" class="flex-shrink-0">
+        <!-- Flash messages container -->
+        <div style="position: fixed; top: 70px; right: 20px; z-index: 1050; width: auto; max-width: 400px;">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+              {% if messages %}
+                {% for category, message in messages %}
+                  <div class="alert alert-{{ category }} alert-dismissible fade show shadow-sm mb-2" role="alert" style="min-width: 300px;">
+                    {{ message }}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                      <span aria-hidden="true">×</span>
+                    </button>
+                  </div>
+                {% endfor %}
+              {% endif %}
+            {% endwith %}
+        </div>
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="footer-custom mt-auto py-3">
+        <div class="container text-center">
+            <p class="mb-0 text-muted-custom">© {{ G_YEAR }} Pneumonia Detection System. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    {% block scripts_extra %}{% endblock %}
+</body>
+</html>

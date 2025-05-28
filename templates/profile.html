@@ -1,0 +1,38 @@
+{% extends "base_layout.html" %}
+{% block title %}My Profile | {{ super() }}{% endblock %}
+
+{% block content %}
+<div class="content-wrapper">
+    <div class="styled-card">
+        <h1 class="card-title-custom"><i class="fas fa-user-edit mr-2 text-primary"></i>Manage Your Profile</h1>
+        <p class="text-center text-muted-custom mb-4">
+            Update your display name and medical history.
+        </p>
+        <form id="profileForm" method="POST" action="{{ url_for('profile') }}" class="needs-validation" novalidate>
+            {# CSRF Token Fix #}
+            {% set raw_csrf_token_value = csrf_token() %}
+            <input type="hidden" name="csrf_token" value="{{ raw_csrf_token_value }}">
+            
+            <div class="form-group">
+                <label for="displayName">Display Name</label>
+                <input type="text" class="form-control" id="displayName" name="displayName" placeholder="Enter your preferred display name" value="{{ displayName }}">
+                <small class="form-text text-muted">This name will be shown in greetings.</small>
+            </div>
+            <div class="form-group">
+                <label for="medicalHistory">Medical History</label>
+                <textarea class="form-control" id="medicalHistory" name="medicalHistory" rows="4" placeholder="Enter relevant medical history (optional)">{{ medicalHistory }}</textarea>
+            </div>
+            
+            <div class="mt-4 text-center">
+                <button type="submit" class="btn btn-theme btn-theme-primary"><i class="fas fa-save mr-2"></i>Update Profile</button>
+            </div>
+        </form>
+        <hr class="my-4">
+        <div class="text-center">
+            <p class="text-muted-custom">Manage your medicine reminders:</p>
+            <a href="{{ url_for('add_medicine') }}" class="btn btn-sm btn-outline-success mr-2"><i class="fas fa-plus-circle mr-1"></i>Add Medicine</a>
+            <a href="{{ url_for('medicine_report') }}" class="btn btn-sm btn-outline-info"><i class="fas fa-notes-medical mr-1"></i>View Medicine Report</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

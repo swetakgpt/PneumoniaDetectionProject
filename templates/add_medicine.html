@@ -1,0 +1,55 @@
+{% extends "base_layout.html" %}
+{% block title %}Add Medicine | {{ super() }}{% endblock %}
+
+{% block content %}
+<div class="content-wrapper">
+    <div class="styled-card">
+        <h1 class="card-title-custom"><i class="fas fa-pills mr-2 text-success"></i>Add New Medicine Reminder</h1>
+        <form action="{{ url_for('add_medicine') }}" method="post" class="needs-validation" novalidate>
+            {# CSRF Token Fix #}
+            {% set raw_csrf_token_value = csrf_token() %}
+            <input type="hidden" name="csrf_token" value="{{ raw_csrf_token_value }}">
+            
+            <div class="form-group">
+                <label for="medicineName">Medicine Name</label>
+                <input type="text" class="form-control" id="medicineName" name="medicineName" placeholder="e.g., Amoxicillin 250mg" value="{{ form_data.get('medicineName', '') }}" required>
+                <div class="invalid-feedback">Please enter the medicine name.</div>
+            </div>
+
+            <div class="form-group">
+                <label for="repetitiveness">Frequency of Intake</label>
+                <select class="form-control" id="repetitiveness" name="repetitiveness" required>
+                    <option value="" disabled {% if not form_data.get('repetitiveness') %}selected{% endif %}>Select frequency...</option>
+                    <option value="daily" {% if form_data.get('repetitiveness') == 'daily' %}selected{% endif %}>Daily</option>
+                    <option value="weekly" {% if form_data.get('repetitiveness') == 'weekly' %}selected{% endif %}>Weekly</option>
+                    <option value="monthly" {% if form_data.get('repetitiveness') == 'monthly' %}selected{% endif %}>Monthly</option>
+                    <option value="as_needed" {% if form_data.get('repetitiveness') == 'as_needed' %}selected{% endif %}>As Needed</option>
+                </select>
+                <div class="invalid-feedback">Please select the frequency.</div>
+            </div>
+
+            <div class="form-group">
+                <label for="repetitionCount">Number of Doses per Intake</label>
+                <input type="number" class="form-control" id="repetitionCount" name="repetitionCount" placeholder="e.g., 1 (for 1 pill)" min="1" value="{{ form_data.get('repetitionCount', '') }}" required>
+                 <div class="invalid-feedback">Please enter a valid count (e.g., 1 or more).</div>
+            </div>
+            
+            <div class="form-group">
+                <label for="medicineNotes">Additional Notes (Optional)</label>
+                <textarea class="form-control" id="medicineNotes" name="medicineNotes" rows="2" placeholder="e.g., Take with food, Before bedtime">{{ form_data.get('medicineNotes', '') }}</textarea>
+            </div>
+
+            <div class="mt-4 d-flex justify-content-between align-items-center">
+                 <a href="{{ url_for('medicine_report') }}" class="btn btn-outline-secondary"><i class="fas fa-arrow-left mr-2"></i>Back to Report</a>
+                 <button type="submit" class="btn btn-theme btn-theme-success"><i class="fas fa-plus-circle mr-2"></i>Add Medicine</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+{% block scripts_extra %}
+<script>
+// Bootstrap form validation script (same as login)
+(function() { /* ... */ })();
+</script>
+{% endblock %}

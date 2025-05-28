@@ -1,0 +1,53 @@
+{% extends "base_layout.html" %}
+{% block title %}Medicine Report | {{ super() }}{% endblock %}
+
+{% block content %}
+<div class="container mt-5 mb-5 flex-grow-1">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="page-title mb-0" style="text-align: left;">Your Medicine Schedule</h1>
+        <a href="{{ url_for('add_medicine') }}" class="btn btn-theme btn-theme-success"><i class="fas fa-plus mr-2"></i>Add New Medicine</a>
+    </div>
+    
+    {% if medicines and medicines|length > 0 %}
+    <div class="table-responsive styled-card" style="padding: 20px;"> <!-- Apply card style to table container -->
+        <table class="table table-hover table-custom mb-0"> <!-- Removed table-custom from table to apply to parent for shadow -->
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Medicine Name</th>
+                    <th scope="col">Frequency</th>
+                    <th scope="col">Doses/Intake</th>
+                    <th scope="col">Notes</th>
+                    <th scope="col">Added On</th>
+                    <!-- <th scope="col">Actions</th> -->
+                </tr>
+            </thead>
+            <tbody>
+                {% for medicine in medicines %}
+                <tr>
+                    <th scope="row">{{ loop.index }}</th>
+                    <td>{{ medicine.medicine_name }}</td>
+                    <td>{{ medicine.repetitiveness | capitalize }}</td>
+                    <td>{{ medicine.repetition_count }}</td>
+                    <td>{{ medicine.medicineNotes or 'N/A' }}</td>
+                    <td>{{ medicine.added_at.strftime('%Y-%m-%d %H:%M') if medicine.added_at else 'N/A' }}</td>
+                    <!-- Actions placeholder
+                    <td>
+                        <a href="#" class="btn btn-sm btn-outline-primary disabled" title="Edit (coming soon)"><i class="fas fa-edit"></i></a>
+                        <a href="#" class="btn btn-sm btn-outline-danger disabled" title="Delete (coming soon)"><i class="fas fa-trash"></i></a>
+                    </td>
+                    -->
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="styled-card text-center">
+        <i class="fas fa-pills fa-3x text-muted-custom mb-3"></i>
+        <p class="text-muted-custom" style="font-size: 1.1rem;">You haven't added any medicines to your schedule yet.</p>
+        <a href="{{ url_for('add_medicine') }}" class="btn btn-theme btn-theme-primary mt-3"><i class="fas fa-plus-circle mr-2"></i>Add Your First Medicine</a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

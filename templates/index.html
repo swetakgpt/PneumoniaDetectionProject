@@ -1,0 +1,176 @@
+{% extends "base_layout.html" %}
+{% block title %}Upload Scan | {{ super() }}{% endblock %}
+
+{% block head_extra %}
+{# Add any page-specific CSS overrides here if needed, but main.css should handle most #}
+<style>
+    /* Optional: If you want a slightly different max-width for the card on this page */
+    /* .upload-section .styled-card { max-width: 750px; } */
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4 mb-4 flex-grow-1"> {# Using Bootstrap container for centering and spacing #}
+    <div class="row justify-content-center upload-section">
+        <div class="col-lg-8 col-md-10 col-sm-12"> {# Responsive column sizing #}
+            <div class="styled-card">
+                <h1 class="card-title-custom mb-4">
+                    <i class="fas fa-cloud-upload-alt mr-2 text-primary"></i>Upload X-Ray for Prediction
+                </h1>
+                <p class="text-center text-muted-custom mb-4">
+                    Please select or drag & drop a chest X-ray image (JPG, PNG, JPEG).
+                </p>
+
+                <form action="{{ url_for('predict_scan') }}" method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
+                    {# CSRF Token - Ensure this method matches the fix from earlier #}
+                    {% set raw_csrf_token_value = csrf_token() %}
+                    <input type="hidden" name="csrf_token" value="{{ raw_csrf_token_value }}">
+                    
+                    <div class="form-group">
+                        {# Visually hidden label for accessibility, the custom wrapper acts as the visual label #}
+                        <label for="file" class="sr-only">Choose Image:</label> 
+                        
+                        <div class="custom-file-input-wrapper" id="drop-zone"> {# Added id for potential drag-drop JS later #}
+                            <input type="file" class="form-control-file" id="file" name="file" accept=".png,.jpg,.jpeg,image/png,image/jpeg" required>
+                            {# Label for the input, styled by CSS to look like the drop zone #}
+                            <label for="file" class="file-input-label mb-0"> {# mb-0 to prevent extra space #}
+                                <span class="icon"><i class="fas fa-image"></i></span>
+                                <span id="file-input-text">Click to browse or drag & drop an image</span>
+                            </label>
+                        </div>
+                        <small id="file-chosen" class="form-text text-muted text-center mt-2">No file chosen</small>
+                        {# Bootstrap validation message for the file input #}
+                        <div class="invalid-feedback text-center">Please select an image file (PNG, JPG, JPEG).</div>
+                    </div>
+
+                    {# Container for the image preview #}
+                    <div id="image-preview-container" class="text-center" style="display: none; margin-top: 20px; margin-bottom: 20px; border: 1px solid var(--border-color); border-radius: 8px; padding: 10px; background-color: #fdfdfd;">
+                        <img id="image-preview" src="#" alt="Image Preview" class="img-fluid" style="max-height: 300px; border-radius: 4px;"/>
+                    </div>
+
+                    <button type="submit" class="btn btn-theme btn-theme-primary btn-block mt-4">
+                        <i class="fas fa-cogs mr-2"></i>Analyze X-Ray
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts_extra %}
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const fileInput = document.getElementById('file');
+        const previewContainer = document.getElementById('image-preview-container');
+        const previewImage = document.getElementById('image-preview');
+        const fileChosenText = document.getElementById('file-chosen');
+        const fileInputLabelText = document.getElementById('file-input-text'); // The span inside the custom label
+        const dropZone = document.getElementById('drop-zone'); // Optional for drag-and-drop styling
+
+        if (!fileInput || !previewContainer || !previewImage || !fileChosenText || !fileInputLabelText || !dropZone) {
+            console.error("One or more UI elements for file input not found. Check IDs.");
+            return; // Stop if essential elements are missing
+        }
+        
+        fileInput.addEventListener('change', function(event) {
+            // console.log("File input 'change' event triggered.");
+            handleFileSelect(event.target.files);
+        });
+
+        // Optional: Drag and Drop functionality
+        dropZone.addEventListener('dragover', function(event) {
+            event.stopPropagation();
+            event.preventDefault();
+            event.dataTransfer.dropEffect = 'copy';
+            dropZone.classList.add('dragover'); // Add a class for styling
+            // console.log("Drag over");
+        });
+
+        dropZone.addEventListener('dragleave', function(event) {
+            event.stopPropagation();
+            event.preventDefault();
+            dropZone.classList.remove('dragover');
+            // console.log("Drag leave");
+        });
+
+        dropZone.addEventListener('drop', function(event) {
+            event.stopPropagation();
+            event.preventDefault();
+            dropZone.classList.remove('dragover');
+            // console.log("File dropped.");
+            const files = event.dataTransfer.files;
+            fileInput.files = files; // Assign dropped files to the input
+            handleFileSelect(files);
+        });
+
+
+        function handleFileSelect(files) {
+            if (files && files.length > 0) {
+                const file = files[0];
+                // console.log("File selected/dropped:", file.name);
+
+                // Basic file type check (optional, as 'accept' attribute handles some)
+                const allowedTypes = ['image/png', 'image/jpeg'];
+                if (!allowedTypes.includes(file.type)) {
+                    fileChosenText.textContent = 'Invalid file type. Please select PNG or JPG/JPEG.';
+                    fileChosenText.style.color = 'red';
+                    previewContainer.style.display = 'none';
+                    previewImage.src = '#';
+                    if (fileInputLabelText) {
+                        fileInputLabelText.textContent = 'Click to browse or drag & drop';
+                    }
+                    fileInput.value = ''; // Clear the file input
+                    fileInput.classList.add('is-invalid'); // Show Bootstrap invalid feedback
+                    return;
+                }
+                fileInput.classList.remove('is-invalid'); // Remove invalid state if file is okay
+
+                fileChosenText.textContent = 'Selected file: ' + file.name;
+                fileChosenText.style.color = ''; // Reset color
+                if (fileInputLabelText) {
+                    fileInputLabelText.textContent = 'Change file: ' + file.name;
+                }
+                
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    previewImage.src = e.target.result;
+                    previewContainer.style.display = 'block'; 
+                };
+                reader.onerror = function() {
+                    console.error("Error reading file.");
+                    fileChosenText.textContent = 'Error reading file.';
+                    fileChosenText.style.color = 'red';
+                }
+                reader.readAsDataURL(file);
+            } else {
+                // console.log("No file selected or file selection cleared.");
+                fileChosenText.textContent = 'No file chosen';
+                if (fileInputLabelText) {
+                    fileInputLabelText.textContent = 'Click to browse or drag & drop';
+                }
+                previewImage.src = "#"; // Clear preview
+                previewContainer.style.display = 'none';
+                fileInput.classList.remove('is-invalid');
+            }
+        }
+
+        // Bootstrap form validation (keep this separate)
+        const forms = document.getElementsByClassName('needs-validation');
+        Array.prototype.filter.call(forms, function(form) {
+            form.addEventListener('submit', function(event) {
+                // Special handling for file input if it's empty after interactions
+                if (fileInput.files.length === 0 && fileInput.required) {
+                     fileInput.classList.add('is-invalid'); // Manually trigger invalid for empty required file
+                }
+
+                if (form.checkValidity() === false) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+                form.classList.add('was-validated');
+            }, false);
+        });
+    });
+</script>
+{% endblock %}

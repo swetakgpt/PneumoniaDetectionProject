@@ -1,0 +1,19 @@
+{% extends "base_layout.html" %}
+{% block title %}Page Not Found | {{ super() }}{% endblock %}
+
+{% block content %}
+<div class="content-wrapper d-flex align-items-center justify-content-center" style="min-height: calc(100vh - 120px);"> <!-- Adjust height considering navbar and footer -->
+    <div class="styled-card text-center shadow-lg" style="max-width: 500px;">
+        <i class="far fa-compass fa-5x text-primary mb-4"></i>
+        <h1 class="card-title-custom" style="font-size: 3.5rem; color: var(--danger-color);">404</h1>
+        <h2 class="mb-3">Page Not Found</h2>
+        <p class="lead text-muted-custom">Oops! The page you're looking for seems to have gone exploring.</p>
+        <hr class="my-4">
+        <p>Let's get you back on track:</p>
+        <a href="{{ url_for('home') }}" class="btn btn-theme btn-theme-primary"><i class="fas fa-home mr-2"></i>Go to Homepage</a>
+        {% if current_user_info %}
+        <a href="{{ url_for('dashboard') }}" class="btn btn-theme btn-theme-accent ml-2"><i class="fas fa-tachometer-alt mr-2"></i>Go to Dashboard</a>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

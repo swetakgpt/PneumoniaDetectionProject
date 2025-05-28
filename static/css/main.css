@@ -1,0 +1,547 @@
+/* static/css/main.css */
+
+/* --- Theme Variables --- */
+:root {
+    --primary-color: #3498db; /* Vibrant Blue */
+    --primary-color-darker: #2980b9;
+    --primary-color-light-transparent: rgba(52, 152, 219, 0.1);
+
+    --secondary-color: #9b59b6; /* Amethyst Purple */
+    --secondary-color-darker: #8e44ad;
+
+    --accent-color: #1abc9c; /* Turquoise/Green */
+    --accent-color-darker: #16a085;
+
+    --success-color: #2ecc71; /* Emerald Green */
+    --success-color-darker: #27ae60;
+    --danger-color: #e74c3c; /* Alizarin Crimson */
+    --danger-color-darker: #c0392b;
+    --warning-color: #f39c12; /* Orange */
+    --info-color: #3498db; /* Same as primary for now */
+
+    --light-bg-color: #ecf0f1; /* Clouds - Very Light Grey */
+    --card-bg-color: #ffffff; /* White */
+    --text-color-dark: #2c3e50; /* Midnight Blue - Dark Text */
+    --text-color-medium: #7f8c8d; /* Asbestos - Medium Grey Text */
+    --text-color-light: #ffffff; /* White */
+    --border-color: #bdc3c7; /* Silver */
+    --input-focus-border-color: var(--primary-color);
+    --input-focus-box-shadow: 0 0 0 0.2rem rgba(52, 152, 219, 0.25);
+
+    --font-family-sans-serif: 'Poppins', sans-serif;
+    --navbar-height: 60px; /* Define navbar height for calculations */
+}
+
+/* --- General Body & Typography --- */
+html {
+    scroll-behavior: smooth;
+    height: 100%; 
+}
+
+body {
+    font-family: var(--font-family-sans-serif);
+    background-color: var(--light-bg-color);
+    color: var(--text-color-dark);
+    line-height: 1.7;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    margin: 0;
+    padding-top: var(--navbar-height); /* Account for fixed navbar */
+}
+main.flex-shrink-0 { /* Bootstrap class on main content area */
+    flex: 1 0 auto; /* Allows footer to stick to bottom */
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-weight: 600;
+    color: var(--text-color-dark);
+    margin-bottom: 0.75rem;
+}
+
+a {
+    color: var(--primary-color);
+    transition: color 0.2s ease-in-out, text-decoration 0.2s ease-in-out;
+}
+a:hover {
+    color: var(--primary-color-darker);
+    text-decoration: none; /* Or underline if preferred */
+}
+
+/* --- Navigation Bar --- */
+.navbar-custom {
+    background-color: var(--card-bg-color);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    min-height: var(--navbar-height);
+    border-bottom: 2px solid var(--primary-color-light-transparent);
+    position: fixed; /* <<< MAKE NAVBAR FIXED TO TOP */
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1030; /* Bootstrap's standard z-index for fixed navbars */
+}
+
+.navbar-custom .container { /* To vertically center content in navbar */
+    display: flex;
+    align-items: center;
+    min-height: var(--navbar-height);
+}
+
+.navbar-brand-custom {
+    font-weight: 700;
+    font-size: 1.8rem; /* Larger brand */
+    color: var(--text-color-dark) !important;
+    letter-spacing: -0.5px;
+}
+.navbar-brand-custom .highlight {
+    color: var(--primary-color);
+    font-weight: 700;
+}
+
+.nav-link-custom {
+    color: var(--text-color-medium) !important;
+    font-weight: 500;
+    margin-left: 12px;
+    margin-right: 12px;
+    padding-top: 0.5rem; /* Adjust for visual balance */
+    padding-bottom: 0.5rem; /* Adjust for visual balance */
+    transition: color 0.3s ease, border-bottom-color 0.3s ease;
+    border-bottom: 3px solid transparent;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    letter-spacing: 0.5px;
+    line-height: calc(var(--navbar-height) - 1rem - 6px);
+}
+.nav-link-custom:hover,
+.nav-link-custom.active,
+.navbar-nav .nav-item.active .nav-link-custom { /* Ensure dropdown parent active style */
+    color: var(--primary-color) !important;
+    border-bottom-color: var(--primary-color);
+}
+.navbar-toggler {
+    border-color: rgba(0,0,0,0.1);
+}
+.navbar-toggler-icon {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='30' height='30' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(44, 62, 80, 0.8)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+}
+.dropdown-menu {
+    border: 1px solid rgba(0,0,0,0.07);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+    border-radius: 8px;
+    margin-top: 0;
+}
+.dropdown-item {
+    font-weight: 500;
+    color: var(--text-color-medium);
+    padding: 0.5rem 1.2rem;
+}
+.dropdown-item:hover, .dropdown-item:focus {
+    background-color: var(--primary-color-light-transparent);
+    color: var(--primary-color);
+}
+.dropdown-item.active, .dropdown-item:active {
+    background-color: var(--primary-color);
+    color: var(--text-color-light);
+}
+
+/* --- Content Wrapper for Centering Forms/Cards --- */
+.content-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-grow: 1;
+    padding: 2rem 15px; /* More padding around content */
+    width: 100%;
+}
+
+/* --- Styled Card (for forms, content blocks) --- */
+.styled-card {
+    background-color: var(--card-bg-color);
+    border-radius: 16px; /* More rounded */
+    padding: 35px 45px; /* More padding inside card */
+    box-shadow: 0 10px 30px rgba(44, 62, 80, 0.12); /* Softer, more diffused shadow */
+    width: 100%;
+    max-width: 550px; /* Default max-width for forms */
+    animation: fadeInUp 0.6s ease-out forwards;
+    border-top: 4px solid var(--primary-color); /* Accent border */
+}
+.upload-section .styled-card { /* For index.html */
+    max-width: 750px;
+}
+.styled-card .card-title-custom {
+    font-size: 2.2rem; /* Larger title */
+    font-weight: 700;
+    margin-bottom: 2rem; /* More space after title */
+    color: var(--text-color-dark);
+    text-align: center;
+    letter-spacing: -0.5px;
+}
+
+/* --- Form Elements Styling --- */
+.form-group {
+    margin-bottom: 1.75rem; /* Increased spacing */
+}
+.form-group label {
+    font-weight: 600; /* Bolder labels */
+    margin-bottom: 0.6rem;
+    color: var(--text-color-medium);
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+.form-control {
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    padding: 14px 18px; /* Larger input fields */
+    transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out, background-color 0.2s ease;
+    font-size: 1rem;
+    background-color: #f8f9fa; /* Very light grey input bg */
+}
+.form-control:focus {
+    border-color: var(--input-focus-border-color);
+    box-shadow: var(--input-focus-box-shadow);
+    background-color: var(--card-bg-color); /* White on focus */
+}
+.form-control::placeholder {
+    color: #aab8c2; /* Lighter placeholder */
+    opacity: 1;
+}
+.form-control.is-invalid, .was-validated .form-control:invalid {
+    border-color: var(--danger-color);
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='none' stroke='%23e74c3c' viewBox='0 0 12 12'%3e%3ccircle cx='6' cy='6' r='4.5'/%3e%3cpath stroke-linejoin='round' d='M5.8 3.6h.4L6 6.5z'/%3e%3ccircle cx='6' cy='8.2' r='.6' fill='%23e74c3c' stroke='none'/%3e%3c/svg%3e");
+}
+.form-control.is-valid, .was-validated .form-control:valid {
+    border-color: var(--success-color);
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8' viewBox='0 0 8 8'%3e%3cpath fill='%232ecc71' d='M2.3 6.73L.6 4.53c-.4-1.04.46-1.4L1.1 2l2.4 2.4 1.4-1.4L7.7 2l.3.9-3.8 3.8c-.6.4-1.1.2-1.4-.2z'/%3e%3c/svg%3e");
+}
+
+/* Custom File Input - index.html */
+.custom-file-input-wrapper {
+    position: relative;
+    width: 100%;
+    padding: 30px; /* More padding */
+    border: 2px dashed var(--border-color);
+    border-radius: 12px;
+    text-align: center;
+    transition: border-color 0.3s ease, background-color 0.3s ease;
+    cursor: pointer;
+    background-color: #fdfdfd;
+}
+.custom-file-input-wrapper:hover {
+    border-color: var(--primary-color);
+    background-color: var(--primary-color-light-transparent);
+}
+.custom-file-input-wrapper input[type="file"]#file { /* More specific */
+    position: absolute;
+    left: 0;
+    top: 0;
+    opacity: 0;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+}
+.custom-file-input-wrapper .file-input-label {
+    color: var(--text-color-medium);
+    font-size: 1rem;
+    font-weight: 500;
+    pointer-events: none; /* Label doesn't interfere with input click */
+}
+.custom-file-input-wrapper .file-input-label .icon {
+    font-size: 2.5rem; /* Larger icon */
+    margin-bottom: 15px;
+    display: block;
+    color: var(--primary-color);
+}
+#file-chosen {
+    display: block;
+    margin-top: 10px;
+    font-style: italic;
+    color: var(--text-color-medium);
+    font-size: 0.9rem;
+}
+
+/* --- Button Styling --- */
+.btn-theme {
+    padding: 12px 30px; /* Slightly more padding */
+    font-size: 1.05rem;
+    font-weight: 600;
+    border-radius: 8px; /* Consistent with inputs */
+    transition: all 0.25s ease-out;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    border: none;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+}
+.btn-theme:hover, .btn-theme:focus {
+    transform: translateY(-3px);
+    box-shadow: 0 7px 15px rgba(0,0,0,0.12);
+    color: var(--text-color-light); /* Ensure text remains light */
+}
+.btn-theme:active {
+    transform: translateY(-1px);
+    box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+}
+/* Ripple effect for buttons (optional) */
+.btn-theme::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    background-color: rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    transition: width 0.4s ease, height 0.4s ease;
+    z-index: -1;
+}
+.btn-theme:hover::before {
+    width: 250%; /* Adjust based on button size */
+    height: 250%;
+}
+
+.btn-theme-primary { background-color: var(--primary-color); color: var(--text-color-light); }
+.btn-theme-primary:hover, .btn-theme-primary:focus { background-color: var(--primary-color-darker); }
+
+.btn-theme-success { background-color: var(--success-color); color: var(--text-color-light); }
+.btn-theme-success:hover, .btn-theme-success:focus { background-color: var(--success-color-darker); }
+
+.btn-theme-accent { background-color: var(--accent-color); color: var(--text-color-light); }
+.btn-theme-accent:hover, .btn-theme-accent:focus { background-color: var(--accent-color-darker); }
+
+.btn-theme-danger { background-color: var(--danger-color); color: var(--text-color-light); }
+.btn-theme-danger:hover, .btn-theme-danger:focus { background-color: var(--danger-color-darker); }
+
+.btn-outline-secondary {
+    border-color: var(--text-color-medium);
+    color: var(--text-color-medium);
+    font-weight: 500;
+}
+.btn-outline-secondary:hover {
+    background-color: var(--text-color-medium);
+    color: var(--text-color-light);
+    border-color: var(--text-color-medium);
+}
+
+.btn-block { display: block; width: 100%; }
+
+/* --- Alerts & Flash Messages --- */
+/* Using Bootstrap's built-in alerts, but a styled container */
+/* Position defined in base_layout.html's inline style for Flash messages */
+.alert { /* Global alert tweaks if needed */
+    border-radius: 8px;
+    font-weight: 500;
+    padding: 0.9rem 1.25rem;
+}
+.alert-dismissible .close {
+    padding: 0.9rem 1.25rem;
+}
+/* Specific color overrides if Bootstrap defaults aren't desired */
+.alert-warning { background-color: #fff3cd; border-color: #ffeeba; color: #856404;}
+.alert-danger { background-color: #f8d7da; border-color: #f5c6cb; color: #721c24;}
+
+
+/* --- Tables --- */
+.table-custom-container { /* New wrapper for table card style */
+    background-color: var(--card-bg-color);
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.07);
+    border-top: 3px solid var(--accent-color);
+}
+.table { /* Applied to table inside .table-custom-container */
+    margin-bottom: 0; /* Remove default margin if wrapped */
+}
+.table thead th {
+    background-color: var(--primary-color-light-transparent);
+    color: var(--text-color-dark);
+    font-weight: 600;
+    border-bottom: 2px solid var(--primary-color);
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    letter-spacing: 0.7px;
+    padding: 0.9rem 1rem;
+}
+.table-hover tbody tr:hover {
+    background-color: rgba(52, 152, 219, 0.07); /* Softer primary hover */
+}
+.table td, .table th {
+    vertical-align: middle;
+    padding: 0.9rem 1rem;
+}
+
+
+/* --- Result Page - result.html --- */
+.result-page-card .result-text {
+    font-size: 1.8rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+.result-page-card .result-text.pneumonia { color: var(--danger-color); }
+.result-page-card .result-text.normal { color: var(--success-color); }
+.result-page-card .result-details {
+    font-size: 1.15rem;
+    color: var(--text-color-medium);
+    margin-bottom: 1.5rem;
+    line-height: 1.8;
+}
+
+/* --- Doctor Info - find_doctors.html --- */
+.doctor-info-card h2 { /* Name of doctor */
+    color: var(--primary-color);
+    margin-bottom: 1.5rem;
+    font-weight: 700;
+}
+.doctor-info-card p { font-size: 1.1rem; margin-bottom: 0.8rem; }
+.doctor-info-card p strong { color: var(--text-color-dark); margin-right: 8px; }
+
+/* --- Dashboard - dashboard.html --- */
+.dashboard-welcome {
+    font-size: 1.5rem; /* Slightly smaller */
+    font-weight: 400;
+    color: var(--text-color-medium);
+    margin-bottom: 1.5rem;
+}
+.dashboard-welcome strong {
+    color: var(--primary-color);
+    font-weight: 600;
+}
+/* Using .btn-lg on dashboard for larger buttons */
+.btn-lg { padding: 1rem 2rem; font-size: 1.1rem; }
+
+
+/* --- General Page Title (for non-card titles) --- */
+.page-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 2.5rem; /* More space */
+    color: var(--text-color-dark);
+    text-align: center;
+    letter-spacing: -0.5px;
+}
+
+/* --- Footer Styling --- */
+.footer-custom {
+    background-color: #34495e; /* Wet Asphalt - Darker footer */
+    padding: 2rem 0;
+    text-align: center;
+    /* border-top: 1px solid var(--border-color); removed as bg is dark */
+}
+.footer-custom p {
+    margin-bottom: 0;
+    color: #bdc3c7; /* Silver text on dark footer */
+    font-size: 0.95rem;
+}
+.footer-custom p a {
+    color: var(--accent-color);
+}
+.footer-custom p a:hover {
+    color: #ffffff;
+}
+
+
+/* --- Utility & Text Muted --- */
+.text-muted-custom {
+    color: var(--text-color-medium) !important;
+    font-size: 0.95rem;
+}
+.text-muted-custom a {
+    font-weight: 600; /* Bolder link in muted text */
+    color: var(--accent-color);
+}
+.text-muted-custom a:hover {
+    color: var(--accent-color-darker);
+}
+
+/* --- Animations --- */
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+/* Keyframes for home.html are in its <style> block for now */
+
+/* --- Responsive Adjustments --- */
+@media (max-width: 991px) { /* For .navbar-expand-lg breakpoint */
+    .navbar-nav {
+        margin-top: 15px;
+        border-top: 1px solid var(--primary-color-light-transparent);
+        padding-top: 10px;
+    }
+    .navbar-custom .container {
+        flex-wrap: wrap; /* Allow navbar-brand and toggler to be on one line, nav-items on next */
+    }
+    .navbar-collapse {
+        width: 100%; /* Make collapsed menu full width */
+    }
+    .navbar-nav {
+        margin-top: 10px; /* Space above collapsed items */
+        /* border-top: 1px solid var(--primary-color-light-transparent); */ /* Optional separator */
+        /* padding-top: 10px; */
+    }
+    .nav-link-custom {
+        padding: 10px 5px !important;
+        margin-left: 0; margin-right: 0;
+        border-bottom: none;
+        display: block; /* Make full width */
+        line-height: normal; /* Reset line height for stacked items */
+    }
+    .nav-link-custom:hover,
+    .nav-link-custom.active {
+        background-color: var(--primary-color-light-transparent);
+        border-radius: 5px;
+        border-bottom: none;
+    }
+     .dropdown-menu {
+        box-shadow: none;
+        border: none;
+        background-color: transparent;
+    }
+    .dropdown-item {
+        padding-left: 20px; /* Indent dropdown items on mobile */
+    }
+}
+
+@media (max-width: 768px) {
+    .styled-card {
+        padding: 25px 25px; /* Less padding on smaller screens */
+        margin-left: 10px;
+        margin-right: 10px;
+    }
+    .styled-card .card-title-custom { font-size: 1.8rem; }
+    .page-title { font-size: 2rem; margin-bottom: 2rem; }
+    .btn-theme { padding: 10px 20px; font-size: 0.95rem; letter-spacing: 0.5px;}
+    .btn-lg { padding: 0.8rem 1.5rem; font-size: 1rem; }
+}
+
+@media (max-width: 576px) {
+    body { padding-top: calc(var(--navbar-height) - 5px); } /* Slight adjust for smaller navbar */
+    .content-wrapper { padding-top: 1rem; padding-bottom: 1rem; }
+    .styled-card {
+        margin-top: 1rem;
+        margin-bottom: 1rem;
+        border-radius: 0; /* Full width on small screens */
+        box-shadow: none;
+        border-top-width: 3px;
+        padding: 20px 15px;
+    }
+    .styled-card .card-title-custom { font-size: 1.6rem; }
+    .page-title { font-size: 1.75rem; }
+    /* Specific button adjustments for very small screens if needed */
+    .footer-custom { padding: 1.5rem 0; }
+}
+
+/* static/css/main.css */
+/* ... (your existing styles) ... */
+
+.custom-file-input-wrapper.dragover {
+    border-color: var(--primary-color); /* Or accent-color */
+    background-color: rgba(52, 152, 219, 0.05); /* Very light primary */
+    box-shadow: 0 0 15px rgba(52, 152, 219, 0.3); /* Subtle glow */
+}
+.custom-file-input-wrapper.dragover .file-input-label .icon,
+.custom-file-input-wrapper.dragover .file-input-label span {
+    color: var(--primary-color); /* Or accent-color */
+}

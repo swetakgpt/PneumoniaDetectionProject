@@ -1,0 +1,112 @@
+{% extends "base_layout.html" %}
+{% block title %}Welcome | {{ super() }}{% endblock %}
+
+{% block head_extra %}
+<style>
+    /* Styles specific to Home.html's hero section from your original design */
+    .hero {
+        background: url("{{ url_for('static', filename='images/background.jpg') }}") no-repeat center center fixed;
+        background-size: cover;
+        height: calc(100vh - 56px); /* Adjust 56px based on your navbar height */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: var(--text-color-light);
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+        margin-top: -1rem; /* To pull it up under sticky navbar if navbar-custom padding is 1rem */
+    }
+    .overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(135deg, var(--hero-overlay-start, rgba(20, 30, 48, 0.85)), var(--hero-overlay-end, rgba(36, 59, 85, 0.75)));
+        z-index: 0;
+    }
+    .content { /* This is the .hero .content */
+        z-index: 1;
+        padding: 20px;
+        max-width: 800px;
+    }
+    .content h1 {
+        font-size: 3rem;
+        font-weight: 700;
+        margin-bottom: 1.5rem;
+        animation: fadeInDown 1s ease-out;
+        text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+    }
+    .content p {
+        font-size: 1.15rem;
+        font-weight: 300;
+        line-height: 1.7;
+        margin-bottom: 2.5rem;
+        animation: fadeInUp 1s ease-out 0.3s;
+        animation-fill-mode: backwards;
+    }
+    .button-container {
+        animation: fadeInUp 1s ease-out 0.6s;
+        animation-fill-mode: backwards;
+    }
+    .btn-custom-home { /* Specific to home page buttons */
+        background-color: var(--primary-color);
+        border-color: var(--primary-color);
+        color: var(--text-color-light);
+        padding: 12px 30px;
+        font-size: 1.1em;
+        font-weight: 600;
+        border-radius: 50px;
+        transition: all 0.3s ease;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        margin: 0 10px;
+    }
+    .btn-custom-home:hover, .btn-custom-home:focus {
+        background-color: var(--primary-color-darker);
+        border-color: var(--primary-color-darker);
+        color: var(--text-color-light);
+        transform: translateY(-3px) scale(1.03);
+        box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+    }
+    .btn-custom-home.register-btn {
+        background-color: transparent;
+        border: 2px solid var(--accent-color);
+        color: var(--accent-color);
+    }
+    .btn-custom-home.register-btn:hover, .btn-custom-home.register-btn:focus {
+        background-color: var(--accent-color);
+        border-color: var(--accent-color);
+        color: var(--text-color-light);
+    }
+
+    @media (max-width: 768px) {
+        .hero { height: 100vh; margin-top: 0;}
+        .content h1 { font-size: 2.5rem; }
+        .content p { font-size: 1rem; }
+        .btn-custom-home { display: block; width: 70%; max-width: 250px; margin: 10px auto; }
+    }
+    @keyframes fadeInDown { from { opacity: 0; transform: translateY(-30px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="hero">
+    <div class="overlay"></div>
+    <div class="content">
+        <h1 class="mb-4">Welcome to Pneumonia Detection System</h1>
+        <p class="lead mb-5">Utilize the power of deep learning for accurate and efficient pneumonia detection. Join us to revolutionize healthcare.</p>
+        <div class="button-container">
+            <a href="{{ url_for('login') }}" class="btn btn-custom-home">Login</a>
+            <a href="{{ url_for('register') }}" class="btn btn-custom-home register-btn">Register</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts_extra %}
+<!-- Home specific scripts if any -->
+{% endblock %}

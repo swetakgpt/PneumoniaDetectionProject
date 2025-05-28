@@ -1,0 +1,26 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+*.egg
+.env
+.my_venv/
+venv/
+ENV/
+env/
+pip-selfcheck.json
+pip-log.txt
+
+# OpenCV/Uploads (if you don't want to commit example images or persistent uploads)
+uploads_temp/
+# static/normal/  # If these are generated and shouldn't be in repo
+# static/pneumonia/ # If these are generated and shouldn't be in repo
+
+# IDE specific
+.vscode/
+.idea/
+
+# OS specific
+.DS_Store
+Thumbs.db

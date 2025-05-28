@@ -1,0 +1,36 @@
+{% extends "base_layout.html" %}
+{% block title %}Register | {{ super() }}{% endblock %}
+
+{% block content %}
+<div class="content-wrapper">
+    <div class="styled-card">
+        <h2 class="card-title-custom">Create Account</h2>
+        <form method="post" action="{{ url_for('register') }}" class="mt-4 needs-validation" novalidate>
+            {# CSRF Token Fix #}
+            {% set raw_csrf_token_value = csrf_token() %}
+            <input type="hidden" name="csrf_token" value="{{ raw_csrf_token_value }}">
+
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" class="form-control" placeholder="Choose a username" required>
+                <div class="invalid-feedback">Please choose a username.</div>
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" class="form-control" placeholder="Create a password (min 6 chars)" required minlength="6">
+                <div class="invalid-feedback">Password must be at least 6 characters.</div>
+            </div>
+            <button type="submit" class="btn btn-theme btn-theme-success btn-block mt-4">Register</button>
+        </form>
+        <p class="text-center mt-4 text-muted-custom">
+            Already have an account? <a href="{{ url_for('login') }}">Login here</a>
+        </p>
+    </div>
+</div>
+{% endblock %}
+{% block scripts_extra %}
+<script>
+// Bootstrap form validation script (same as login)
+(function() { /* ... */ })();
+</script>
+{% endblock %}

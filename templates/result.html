@@ -1,0 +1,39 @@
+{% extends "base_layout.html" %}
+{% block title %}Prediction Result | {{ super() }}{% endblock %}
+
+{% block content %}
+<div class="content-wrapper">
+    <div class="styled-card result-page-card">
+        <h1 class="card-title-custom">Prediction Analysis Complete</h1>
+        
+        <div class="result-text {% if result == 'Pneumonia' %}pneumonia{% elif result == 'Normal' %}normal{% endif %}">
+            <i class="fas {% if result == 'Pneumonia' %}fa-lungs-virus{% elif result == 'Normal' %}fa-check-circle{% else %}fa-question-circle{% endif %} fa-2x mb-2"></i><br>
+            The analysis indicates: <strong>{{ result }}</strong>
+        </div>
+        <p class="text-muted-custom">Confidence: {{ confidence }}</p>
+
+        {% if result == 'Pneumonia' %}
+            <p class="result-details">
+                <i class="fas fa-exclamation-triangle text-danger mr-1"></i>The scan suggests indicators of Pneumonia. Please consult a healthcare professional for a definitive diagnosis and medical advice.
+            </p>
+            <a href="{{ url_for('find_doctors') }}" class="btn btn-theme btn-theme-danger mt-3"><i class="fas fa-user-md mr-2"></i>Find Nearby Doctors</a>
+        {% elif result == 'Normal' %}
+            <p class="result-details">
+                <i class="fas fa-thumbs-up text-success mr-1"></i>Great news! The X-ray scan appears to be normal.
+            </p>
+        {% else %}
+             <p class="result-details">
+                The prediction result is '{{ result }}'. Please review or consult a specialist if needed.
+            </p>
+        {% endif %}
+        
+        <hr class="my-4">
+        <a href="{{ url_for('predict_scan') }}" class="btn btn-sm btn-theme btn-theme-primary mr-2">
+            <i class="fas fa-redo mr-1"></i> Predict Another Scan
+        </a>
+        <a href="{{ url_for('prediction_history') }}" class="btn btn-sm btn-outline-secondary">
+            <i class="fas fa-history mr-1"></i> View Prediction History
+        </a>
+    </div>
+</div>
+{% endblock %}

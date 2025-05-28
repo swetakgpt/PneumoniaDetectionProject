@@ -1,0 +1,9 @@
+Flask
+pymongo
+python-dotenv
+opencv-python-headless
+numpy
+Werkzeug
+Flask-WTF # For CSRF protection and forms
+keras
+tensorflow

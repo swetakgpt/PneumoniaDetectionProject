@@ -327,9 +327,9 @@ def prediction_result_page():
 def find_doctors():
     # This could be expanded to fetch from a DB or an API
     doctors = [
-        {"name": "Dr. S K Agrawal", "speciality": "Chest", "address": "Maurya Bhawan, Varanasi", "phone": "+91 XXXXXX"},
-        {"name": "Dr. Samaria", "speciality": "Multi-speciality & Chest", "address": "Durgakund, Varanasi", "phone": "+91 YYYYYY"},
-        {"name": "Dr. Manoj Kumar Gupta", "speciality": "Chest & Respiratory", "address": "Lanka, Varanasi", "phone": "+91 ZZZZZZ"},
+        {"name": "Dr. S K Agrawal", "speciality": "Chest", "address": "Maurya Bhawan, Siliguri", "phone": "+91 XXXXXX"},
+        {"name": "Dr. Samaria", "speciality": "Multi-speciality & Chest", "address": "Durga Mandir, Siliguri", "phone": "+91 YYYYYY"},
+        {"name": "Dr. Manoj Kumar Gupta", "speciality": "Chest & Respiratory", "address": "Darjeeling More, Siliguri", "phone": "+91 ZZZZZZ"},
     ]
     random_doctor = random.choice(doctors)
     return render_template("find_doctors.html", doctor=random_doctor)

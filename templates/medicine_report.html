@@ -2,48 +2,46 @@
 {% block title %}Medicine Report | {{ super() }}{% endblock %}
 
 {% block content %}
-<div class="container mt-5 mb-5 flex-grow-1">
+{# Use container-fluid for maximum width, table-page-container adds padding #}
+<div class="container-fluid table-page-container"> 
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h1 class="page-title mb-0" style="text-align: left;">Your Medicine Schedule</h1>
         <a href="{{ url_for('add_medicine') }}" class="btn btn-theme btn-theme-success"><i class="fas fa-plus mr-2"></i>Add New Medicine</a>
     </div>
     
     {% if medicines and medicines|length > 0 %}
-    <div class="table-responsive styled-card" style="padding: 20px;"> <!-- Apply card style to table container -->
-        <table class="table table-hover table-custom mb-0"> <!-- Removed table-custom from table to apply to parent for shadow -->
-            <thead>
-                <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">Medicine Name</th>
-                    <th scope="col">Frequency</th>
-                    <th scope="col">Doses/Intake</th>
-                    <th scope="col">Notes</th>
-                    <th scope="col">Added On</th>
-                    <!-- <th scope="col">Actions</th> -->
-                </tr>
-            </thead>
-            <tbody>
-                {% for medicine in medicines %}
-                <tr>
-                    <th scope="row">{{ loop.index }}</th>
-                    <td>{{ medicine.medicine_name }}</td>
-                    <td>{{ medicine.repetitiveness | capitalize }}</td>
-                    <td>{{ medicine.repetition_count }}</td>
-                    <td>{{ medicine.medicineNotes or 'N/A' }}</td>
-                    <td>{{ medicine.added_at.strftime('%Y-%m-%d %H:%M') if medicine.added_at else 'N/A' }}</td>
-                    <!-- Actions placeholder
-                    <td>
-                        <a href="#" class="btn btn-sm btn-outline-primary disabled" title="Edit (coming soon)"><i class="fas fa-edit"></i></a>
-                        <a href="#" class="btn btn-sm btn-outline-danger disabled" title="Delete (coming soon)"><i class="fas fa-trash"></i></a>
-                    </td>
-                    -->
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+    <div class="table-custom-container"> {# This provides the card styling for the table #}
+        <div class="table-responsive"> {# Bootstrap class for horizontal scrolling #}
+            <table class="table table-hover mb-0"> 
+                <thead>
+                    <tr>
+                        <th scope="col">#</th> {/* Default narrow width due to CSS first-child rule */}
+                        <th scope="col" class="col-medicine-name">Medicine Name</th> 
+                        <th scope="col" class="col-medicine-frequency">Frequency</th>
+                        <th scope="col" class="col-medicine-doses">Doses/Intake</th>
+                        <th scope="col" class="col-medicine-notes">Notes</th> 
+                        <th scope="col" class="col-medicine-date">Added On</th>
+                        {# <th scope="col" class="col-actions">Actions</th> #}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for medicine in medicines %}
+                    <tr>
+                        <th scope="row">{{ loop.index }}</th>
+                        <td class="col-medicine-name">{{ medicine.medicine_name }}</td>
+                        <td class="col-medicine-frequency">{{ medicine.repetitiveness | capitalize }}</td>
+                        <td class="col-medicine-doses">{{ medicine.repetition_count }}</td>
+                        <td class="col-medicine-notes">{{ medicine.medicineNotes or 'N/A' }}</td>
+                        <td class="col-medicine-date">{{ medicine.added_at.strftime('%Y-%m-%d %H:%M') if medicine.added_at else 'N/A' }} UTC</td>
+                        {# <td class="col-actions"> ... actions ... </td> #}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
     </div>
     {% else %}
-    <div class="styled-card text-center">
+    <div class="styled-card text-center" style="max-width: 600px; margin-left:auto; margin-right:auto;"> {# Standard card for "no items" #}
         <i class="fas fa-pills fa-3x text-muted-custom mb-3"></i>
         <p class="text-muted-custom" style="font-size: 1.1rem;">You haven't added any medicines to your schedule yet.</p>
         <a href="{{ url_for('add_medicine') }}" class="btn btn-theme btn-theme-primary mt-3"><i class="fas fa-plus-circle mr-2"></i>Add Your First Medicine</a>

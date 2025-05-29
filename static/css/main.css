@@ -29,13 +29,13 @@
     --input-focus-box-shadow: 0 0 0 0.2rem rgba(52, 152, 219, 0.25);
 
     --font-family-sans-serif: 'Poppins', sans-serif;
-    --navbar-height: 60px; /* Define navbar height for calculations */
+    --navbar-height: 60px; 
 }
 
 /* --- General Body & Typography --- */
 html {
     scroll-behavior: smooth;
-    height: 100%; 
+    height: 100%;
 }
 
 body {
@@ -45,12 +45,13 @@ body {
     line-height: 1.7;
     display: flex;
     flex-direction: column;
-    min-height: 100vh;
-    margin: 0;
-    padding-top: var(--navbar-height); /* Account for fixed navbar */
+    min-height: 100vh; 
+    margin: 0; 
+    padding-top: var(--navbar-height); 
 }
-main.flex-shrink-0 { /* Bootstrap class on main content area */
-    flex: 1 0 auto; /* Allows footer to stick to bottom */
+
+main.flex-shrink-0 {
+    flex: 1 0 auto;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -65,7 +66,7 @@ a {
 }
 a:hover {
     color: var(--primary-color-darker);
-    text-decoration: none; /* Or underline if preferred */
+    text-decoration: none; 
 }
 
 /* --- Navigation Bar --- */
@@ -73,23 +74,21 @@ a:hover {
     background-color: var(--card-bg-color);
     box-shadow: 0 4px 12px rgba(0,0,0,0.08);
     min-height: var(--navbar-height);
-    border-bottom: 2px solid var(--primary-color-light-transparent);
-    position: fixed; /* <<< MAKE NAVBAR FIXED TO TOP */
+    position: fixed; 
     top: 0;
     left: 0;
     right: 0;
-    z-index: 1030; /* Bootstrap's standard z-index for fixed navbars */
+    z-index: 1030; 
 }
-
-.navbar-custom .container { /* To vertically center content in navbar */
+.navbar-custom .container { 
     display: flex;
     align-items: center;
     min-height: var(--navbar-height);
+    /* Default Bootstrap .container has max-widths, which is fine here */
 }
-
 .navbar-brand-custom {
     font-weight: 700;
-    font-size: 1.8rem; /* Larger brand */
+    font-size: 1.8rem; 
     color: var(--text-color-dark) !important;
     letter-spacing: -0.5px;
 }
@@ -97,30 +96,27 @@ a:hover {
     color: var(--primary-color);
     font-weight: 700;
 }
-
 .nav-link-custom {
     color: var(--text-color-medium) !important;
     font-weight: 500;
     margin-left: 12px;
     margin-right: 12px;
-    padding-top: 0.5rem; /* Adjust for visual balance */
-    padding-bottom: 0.5rem; /* Adjust for visual balance */
+    padding-top: 0.5rem; 
+    padding-bottom: 0.5rem; 
     transition: color 0.3s ease, border-bottom-color 0.3s ease;
-    border-bottom: 3px solid transparent;
+    border-bottom: 3px solid transparent; 
     text-transform: uppercase;
     font-size: 0.85rem;
     letter-spacing: 0.5px;
-    line-height: calc(var(--navbar-height) - 1rem - 6px);
+    line-height: calc(var(--navbar-height) - 1rem - 6px); 
 }
 .nav-link-custom:hover,
-.nav-link-custom.active,
-.navbar-nav .nav-item.active .nav-link-custom { /* Ensure dropdown parent active style */
+.nav-link-custom.active, 
+.navbar-nav .nav-item.active > .nav-link-custom { 
     color: var(--primary-color) !important;
     border-bottom-color: var(--primary-color);
 }
-.navbar-toggler {
-    border-color: rgba(0,0,0,0.1);
-}
+.navbar-toggler { border-color: rgba(0,0,0,0.1); }
 .navbar-toggler-icon {
     background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='30' height='30' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(44, 62, 80, 0.8)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
 }
@@ -128,232 +124,120 @@ a:hover {
     border: 1px solid rgba(0,0,0,0.07);
     box-shadow: 0 5px 15px rgba(0,0,0,0.08);
     border-radius: 8px;
-    margin-top: 0;
+    margin-top: 0; 
 }
-.dropdown-item {
-    font-weight: 500;
-    color: var(--text-color-medium);
-    padding: 0.5rem 1.2rem;
-}
-.dropdown-item:hover, .dropdown-item:focus {
-    background-color: var(--primary-color-light-transparent);
-    color: var(--primary-color);
-}
-.dropdown-item.active, .dropdown-item:active {
-    background-color: var(--primary-color);
-    color: var(--text-color-light);
-}
+.dropdown-item { font-weight: 500; color: var(--text-color-medium); padding: 0.5rem 1.2rem; }
+.dropdown-item:hover, .dropdown-item:focus { background-color: var(--primary-color-light-transparent); color: var(--primary-color); }
+.dropdown-item.active, .dropdown-item:active { background-color: var(--primary-color); color: var(--text-color-light); }
 
-/* --- Content Wrapper for Centering Forms/Cards --- */
-.content-wrapper {
+/* --- Content Wrappers --- */
+.content-wrapper { /* For forms and other centered, narrower content */
     display: flex;
     justify-content: center;
     align-items: center;
     flex-grow: 1;
-    padding: 2rem 15px; /* More padding around content */
+    padding: 2rem 15px;
     width: 100%;
+}
+/* Container for table pages that can go wider */
+.table-page-container { /* Applied to .container-fluid or .container-xl in HTML */
+    padding-top: 2rem;    
+    padding-bottom: 2rem;
+    flex-grow: 1; 
+    width: 100%; /* Max width will be handled by .container-xl or .container-fluid classes from Bootstrap */
+}
+.container-fluid.table-page-container {
+    padding-left: 20px; /* Side padding for full-width fluid container */
+    padding-right: 20px;
 }
 
-/* --- Styled Card (for forms, content blocks) --- */
+/* --- Styled Card (for forms, standard content blocks) --- */
 .styled-card {
     background-color: var(--card-bg-color);
-    border-radius: 16px; /* More rounded */
-    padding: 35px 45px; /* More padding inside card */
-    box-shadow: 0 10px 30px rgba(44, 62, 80, 0.12); /* Softer, more diffused shadow */
+    border-radius: 16px;
+    padding: 35px 45px; 
+    box-shadow: 0 10px 30px rgba(44, 62, 80, 0.12);
     width: 100%;
-    max-width: 550px; /* Default max-width for forms */
+    max-width: 550px; 
     animation: fadeInUp 0.6s ease-out forwards;
-    border-top: 4px solid var(--primary-color); /* Accent border */
+    border-top: 4px solid var(--primary-color); 
+    margin-left: auto; 
+    margin-right: auto;
 }
-.upload-section .styled-card { /* For index.html */
-    max-width: 750px;
-}
+.upload-section .styled-card { max-width: 750px; } 
 .styled-card .card-title-custom {
-    font-size: 2.2rem; /* Larger title */
+    font-size: 2.2rem;
     font-weight: 700;
-    margin-bottom: 2rem; /* More space after title */
+    margin-bottom: 2rem;
     color: var(--text-color-dark);
     text-align: center;
     letter-spacing: -0.5px;
 }
 
-/* --- Form Elements Styling --- */
-.form-group {
-    margin-bottom: 1.75rem; /* Increased spacing */
-}
-.form-group label {
-    font-weight: 600; /* Bolder labels */
-    margin-bottom: 0.6rem;
-    color: var(--text-color-medium);
-    font-size: 0.9rem;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-.form-control {
-    border-radius: 8px;
-    border: 1px solid var(--border-color);
-    padding: 14px 18px; /* Larger input fields */
-    transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out, background-color 0.2s ease;
-    font-size: 1rem;
-    background-color: #f8f9fa; /* Very light grey input bg */
-}
-.form-control:focus {
-    border-color: var(--input-focus-border-color);
-    box-shadow: var(--input-focus-box-shadow);
-    background-color: var(--card-bg-color); /* White on focus */
-}
-.form-control::placeholder {
-    color: #aab8c2; /* Lighter placeholder */
-    opacity: 1;
-}
-.form-control.is-invalid, .was-validated .form-control:invalid {
-    border-color: var(--danger-color);
-    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='none' stroke='%23e74c3c' viewBox='0 0 12 12'%3e%3ccircle cx='6' cy='6' r='4.5'/%3e%3cpath stroke-linejoin='round' d='M5.8 3.6h.4L6 6.5z'/%3e%3ccircle cx='6' cy='8.2' r='.6' fill='%23e74c3c' stroke='none'/%3e%3c/svg%3e");
-}
-.form-control.is-valid, .was-validated .form-control:valid {
-    border-color: var(--success-color);
-    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8' viewBox='0 0 8 8'%3e%3cpath fill='%232ecc71' d='M2.3 6.73L.6 4.53c-.4-1.04.46-1.4L1.1 2l2.4 2.4 1.4-1.4L7.7 2l.3.9-3.8 3.8c-.6.4-1.1.2-1.4-.2z'/%3e%3c/svg%3e");
-}
+/* --- Form Elements Styling (Mostly as before) --- */
+.form-group { margin-bottom: 1.75rem; }
+.form-group label { font-weight: 600; margin-bottom: 0.6rem; color: var(--text-color-medium); font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.5px; }
+.form-control { border-radius: 8px; border: 1px solid var(--border-color); padding: 14px 18px; transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out, background-color 0.2s ease; font-size: 1rem; background-color: #f8f9fa; }
+.form-control:focus { border-color: var(--input-focus-border-color); box-shadow: var(--input-focus-box-shadow); background-color: var(--card-bg-color); }
+.form-control::placeholder { color: #aab8c2; opacity: 1; }
+.form-control.is-invalid, .was-validated .form-control:invalid { border-color: var(--danger-color); background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='none' stroke='%23e74c3c' viewBox='0 0 12 12'%3e%3ccircle cx='6' cy='6' r='4.5'/%3e%3cpath stroke-linejoin='round' d='M5.8 3.6h.4L6 6.5z'/%3e%3ccircle cx='6' cy='8.2' r='.6' fill='%23e74c3c' stroke='none'/%3e%3c/svg%3e");}
+.form-control.is-valid, .was-validated .form-control:valid { border-color: var(--success-color); background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8' viewBox='0 0 8 8'%3e%3cpath fill='%232ecc71' d='M2.3 6.73L.6 4.53c-.4-1.04.46-1.4L1.1 2l2.4 2.4 1.4-1.4L7.7 2l.3.9-3.8 3.8c-.6.4-1.1.2-1.4-.2z'/%3e%3c/svg%3e");}
 
-/* Custom File Input - index.html */
-.custom-file-input-wrapper {
-    position: relative;
-    width: 100%;
-    padding: 30px; /* More padding */
-    border: 2px dashed var(--border-color);
-    border-radius: 12px;
-    text-align: center;
-    transition: border-color 0.3s ease, background-color 0.3s ease;
-    cursor: pointer;
-    background-color: #fdfdfd;
-}
-.custom-file-input-wrapper:hover {
-    border-color: var(--primary-color);
-    background-color: var(--primary-color-light-transparent);
-}
-.custom-file-input-wrapper input[type="file"]#file { /* More specific */
-    position: absolute;
-    left: 0;
-    top: 0;
-    opacity: 0;
-    width: 100%;
-    height: 100%;
-    cursor: pointer;
-}
-.custom-file-input-wrapper .file-input-label {
-    color: var(--text-color-medium);
-    font-size: 1rem;
-    font-weight: 500;
-    pointer-events: none; /* Label doesn't interfere with input click */
-}
-.custom-file-input-wrapper .file-input-label .icon {
-    font-size: 2.5rem; /* Larger icon */
-    margin-bottom: 15px;
-    display: block;
-    color: var(--primary-color);
-}
-#file-chosen {
-    display: block;
-    margin-top: 10px;
-    font-style: italic;
-    color: var(--text-color-medium);
-    font-size: 0.9rem;
-}
+/* Custom File Input - index.html (Mostly as before) */
+.custom-file-input-wrapper { position: relative; width: 100%; padding: 30px; border: 2px dashed var(--border-color); border-radius: 12px; text-align: center; transition: border-color 0.3s ease, background-color 0.3s ease; cursor: pointer; background-color: #fdfdfd; }
+.custom-file-input-wrapper:hover, .custom-file-input-wrapper.dragover { border-color: var(--primary-color); background-color: var(--primary-color-light-transparent); box-shadow: 0 0 15px rgba(52, 152, 219, 0.3); }
+.custom-file-input-wrapper input[type="file"]#file { position: absolute; left: 0; top: 0; opacity: 0; width: 100%; height: 100%; cursor: pointer; }
+.custom-file-input-wrapper .file-input-label { color: var(--text-color-medium); font-size: 1rem; font-weight: 500; pointer-events: none; }
+.custom-file-input-wrapper .file-input-label .icon { font-size: 2.5rem; margin-bottom: 15px; display: block; color: var(--primary-color); }
+.custom-file-input-wrapper.dragover .file-input-label .icon,
+.custom-file-input-wrapper.dragover .file-input-label span { color: var(--primary-color); }
+#file-chosen { display: block; margin-top: 10px; font-style: italic; color: var(--text-color-medium); font-size: 0.9rem; }
 
-/* --- Button Styling --- */
-.btn-theme {
-    padding: 12px 30px; /* Slightly more padding */
-    font-size: 1.05rem;
-    font-weight: 600;
-    border-radius: 8px; /* Consistent with inputs */
-    transition: all 0.25s ease-out;
-    text-transform: uppercase;
-    letter-spacing: 0.8px;
-    border: none;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.08);
-    position: relative;
-    overflow: hidden;
-    z-index: 1;
-}
-.btn-theme:hover, .btn-theme:focus {
-    transform: translateY(-3px);
-    box-shadow: 0 7px 15px rgba(0,0,0,0.12);
-    color: var(--text-color-light); /* Ensure text remains light */
-}
-.btn-theme:active {
-    transform: translateY(-1px);
-    box-shadow: 0 3px 8px rgba(0,0,0,0.1);
-}
-/* Ripple effect for buttons (optional) */
-.btn-theme::before {
-    content: "";
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 0;
-    height: 0;
-    background-color: rgba(255, 255, 255, 0.3);
-    border-radius: 50%;
-    transform: translate(-50%, -50%);
-    transition: width 0.4s ease, height 0.4s ease;
-    z-index: -1;
-}
-.btn-theme:hover::before {
-    width: 250%; /* Adjust based on button size */
-    height: 250%;
-}
-
+/* --- Button Styling (Mostly as before) --- */
+.btn-theme { padding: 12px 30px; font-size: 1.05rem; font-weight: 600; border-radius: 8px; transition: all 0.25s ease-out; text-transform: uppercase; letter-spacing: 0.8px; border: none; box-shadow: 0 4px 10px rgba(0,0,0,0.08); position: relative; overflow: hidden; z-index: 1;}
+.btn-theme:hover, .btn-theme:focus { transform: translateY(-3px); box-shadow: 0 7px 15px rgba(0,0,0,0.12); color: var(--text-color-light); }
+.btn-theme:active { transform: translateY(-1px); box-shadow: 0 3px 8px rgba(0,0,0,0.1); }
+.btn-theme::before { content: ""; position: absolute; top: 50%; left: 50%; width: 0; height: 0; background-color: rgba(255, 255, 255, 0.3); border-radius: 50%; transform: translate(-50%, -50%); transition: width 0.4s ease, height 0.4s ease; z-index: -1; }
+.btn-theme:hover::before { width: 250%; height: 250%; }
 .btn-theme-primary { background-color: var(--primary-color); color: var(--text-color-light); }
 .btn-theme-primary:hover, .btn-theme-primary:focus { background-color: var(--primary-color-darker); }
-
 .btn-theme-success { background-color: var(--success-color); color: var(--text-color-light); }
 .btn-theme-success:hover, .btn-theme-success:focus { background-color: var(--success-color-darker); }
-
 .btn-theme-accent { background-color: var(--accent-color); color: var(--text-color-light); }
 .btn-theme-accent:hover, .btn-theme-accent:focus { background-color: var(--accent-color-darker); }
-
 .btn-theme-danger { background-color: var(--danger-color); color: var(--text-color-light); }
 .btn-theme-danger:hover, .btn-theme-danger:focus { background-color: var(--danger-color-darker); }
-
-.btn-outline-secondary {
-    border-color: var(--text-color-medium);
-    color: var(--text-color-medium);
-    font-weight: 500;
-}
-.btn-outline-secondary:hover {
-    background-color: var(--text-color-medium);
-    color: var(--text-color-light);
-    border-color: var(--text-color-medium);
-}
-
+.btn-outline-secondary { border-color: var(--text-color-medium); color: var(--text-color-medium); font-weight: 500; }
+.btn-outline-secondary:hover { background-color: var(--text-color-medium); color: var(--text-color-light); border-color: var(--text-color-medium); }
 .btn-block { display: block; width: 100%; }
+.btn-lg { padding: 1rem 2rem; font-size: 1.1rem; }
 
-/* --- Alerts & Flash Messages --- */
-/* Using Bootstrap's built-in alerts, but a styled container */
-/* Position defined in base_layout.html's inline style for Flash messages */
-.alert { /* Global alert tweaks if needed */
-    border-radius: 8px;
-    font-weight: 500;
-    padding: 0.9rem 1.25rem;
-}
-.alert-dismissible .close {
-    padding: 0.9rem 1.25rem;
-}
-/* Specific color overrides if Bootstrap defaults aren't desired */
-.alert-warning { background-color: #fff3cd; border-color: #ffeeba; color: #856404;}
-.alert-danger { background-color: #f8d7da; border-color: #f5c6cb; color: #721c24;}
+/* --- Alerts & Flash Messages (As before) --- */
+.alert { border-radius: 8px; font-weight: 500; padding: 0.9rem 1.25rem; }
+.alert-dismissible .close { padding: 0.9rem 1.25rem; }
 
-
-/* --- Tables --- */
-.table-custom-container { /* New wrapper for table card style */
+/* --- Table Card Styling Wrapper (for history, reports) --- */
+.table-custom-container {
     background-color: var(--card-bg-color);
     border-radius: 12px;
-    padding: 20px;
+    padding: 20px; /* Padding INSIDE the card for the table-responsive div */
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.07);
     border-top: 3px solid var(--accent-color);
+    margin-bottom: 2rem;
+    width: 100%; /* Take full width of its parent (e.g., .table-page-container) */
+    /* overflow: hidden; <<< REMOVED: We want .table-responsive to handle scroll, not hide it */
 }
-.table { /* Applied to table inside .table-custom-container */
-    margin-bottom: 0; /* Remove default margin if wrapped */
+.table-responsive {
+    width: 100%; /* Ensure it tries to take full width of .table-custom-container */
+    display: block; /* Ensure it behaves as a block to contain the table */
+    -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS for the table if it overflows */
+    /* Bootstrap's .table-responsive already adds overflow-x: auto; */
+}
+.table { 
+    margin-bottom: 0; 
+    width: 100%; /* Make the table itself try to be 100% of .table-responsive initially */
+    table-layout: auto; /* Let the browser decide column widths based on content initially */
+    /* min-width: 700px; */ /* Optional: Set a minimum width for your table if you know it will always need it */
 }
 .table thead th {
     background-color: var(--primary-color-light-transparent);
@@ -364,184 +248,137 @@ a:hover {
     font-size: 0.8rem;
     letter-spacing: 0.7px;
     padding: 0.9rem 1rem;
+    white-space: nowrap; /* Keep headers on one line; table will expand or table-responsive will scroll */
+    text-align: left; 
 }
-.table-hover tbody tr:hover {
-    background-color: rgba(52, 152, 219, 0.07); /* Softer primary hover */
-}
-.table td, .table th {
+.table tbody th, /* For the '#' column header if it's a <th> in tbody */
+.table td {
     vertical-align: middle;
     padding: 0.9rem 1rem;
+    word-break: break-word; /* Allow long words in cells to wrap IF they are too long for the column */
+    white-space: normal;   /* Ensure cell content can wrap */
+    text-align: left; 
+}
+.table-hover tbody tr:hover {
+    background-color: rgba(52, 152, 219, 0.07); 
+}
+/* Specific column alignments or width suggestions */
+.table th:first-child, .table td:first-child { /* For '#' column */
+    text-align: center;
+    width: 5%; 
+    min-width: 40px; /* Ensure it has some space */
+}
+.table .font-weight-bold.text-danger, /* Pneumonia result */
+.table .font-weight-bold.text-success { /* Normal result */
+    text-align: left; /* Keep results left aligned unless specified */
+}
+/* Example classes for columns if you add them in HTML */
+.table .col-history-date, .table .col-medicine-date {
+    min-width: 160px; 
+    white-space: nowrap; 
+}
+.table .col-history-filename, .table .col-medicine-name {
+    min-width: 200px; 
+    white-space: normal; 
+}
+.table .col-history-result { min-width: 120px; }
+.table .col-history-confidence, .table .col-medicine-frequency, .table .col-medicine-doses {
+    min-width: 120px;
+    text-align: left; /* Or 'right' for numerical data */
+}
+.table .col-medicine-notes {
+    min-width: 220px;
+    white-space: normal;
 }
 
 
-/* --- Result Page - result.html --- */
-.result-page-card .result-text {
-    font-size: 1.8rem;
-    font-weight: 600;
-    margin-bottom: 1rem;
-}
+/* --- Result Page, Doctor Info, Dashboard (Mostly as before) --- */
+.result-page-card .result-text { font-size: 1.8rem; font-weight: 600; margin-bottom: 1rem; }
 .result-page-card .result-text.pneumonia { color: var(--danger-color); }
 .result-page-card .result-text.normal { color: var(--success-color); }
-.result-page-card .result-details {
-    font-size: 1.15rem;
-    color: var(--text-color-medium);
-    margin-bottom: 1.5rem;
-    line-height: 1.8;
-}
+.result-page-card .result-details { font-size: 1.15rem; color: var(--text-color-medium); margin-bottom: 1.5rem; line-height: 1.8; }
 
-/* --- Doctor Info - find_doctors.html --- */
-.doctor-info-card h2 { /* Name of doctor */
-    color: var(--primary-color);
-    margin-bottom: 1.5rem;
-    font-weight: 700;
-}
+.doctor-info-card h2 { color: var(--primary-color); margin-bottom: 1.5rem; font-weight: 700; }
 .doctor-info-card p { font-size: 1.1rem; margin-bottom: 0.8rem; }
 .doctor-info-card p strong { color: var(--text-color-dark); margin-right: 8px; }
 
-/* --- Dashboard - dashboard.html --- */
-.dashboard-welcome {
-    font-size: 1.5rem; /* Slightly smaller */
-    font-weight: 400;
-    color: var(--text-color-medium);
-    margin-bottom: 1.5rem;
-}
-.dashboard-welcome strong {
-    color: var(--primary-color);
-    font-weight: 600;
-}
-/* Using .btn-lg on dashboard for larger buttons */
-.btn-lg { padding: 1rem 2rem; font-size: 1.1rem; }
+.dashboard-welcome { font-size: 1.5rem; font-weight: 400; color: var(--text-color-medium); margin-bottom: 1.5rem; }
+.dashboard-welcome strong { color: var(--primary-color); font-weight: 600; }
 
 
-/* --- General Page Title (for non-card titles) --- */
+/* --- General Page Title --- */
 .page-title {
     font-size: 2.5rem;
     font-weight: 700;
-    margin-bottom: 2.5rem; /* More space */
+    margin-bottom: 2.5rem;
     color: var(--text-color-dark);
-    text-align: center;
+    text-align: center; /* Default, can be overridden by inline style for left-align */
     letter-spacing: -0.5px;
 }
 
-/* --- Footer Styling --- */
-.footer-custom {
-    background-color: #34495e; /* Wet Asphalt - Darker footer */
-    padding: 2rem 0;
-    text-align: center;
-    /* border-top: 1px solid var(--border-color); removed as bg is dark */
-}
-.footer-custom p {
-    margin-bottom: 0;
-    color: #bdc3c7; /* Silver text on dark footer */
-    font-size: 0.95rem;
-}
-.footer-custom p a {
-    color: var(--accent-color);
-}
-.footer-custom p a:hover {
-    color: #ffffff;
-}
+/* --- Footer Styling (As before) --- */
+.footer-custom { background-color: #34495e; padding: 2rem 0; text-align: center; }
+.footer-custom p { margin-bottom: 0; color: #bdc3c7; font-size: 0.95rem; }
+.footer-custom p a { color: var(--accent-color); }
+.footer-custom p a:hover { color: var(--text-color-light); }
 
 
-/* --- Utility & Text Muted --- */
-.text-muted-custom {
-    color: var(--text-color-medium) !important;
-    font-size: 0.95rem;
-}
-.text-muted-custom a {
-    font-weight: 600; /* Bolder link in muted text */
-    color: var(--accent-color);
-}
-.text-muted-custom a:hover {
-    color: var(--accent-color-darker);
-}
+/* --- Utility & Text Muted (As before) --- */
+.text-muted-custom { color: var(--text-color-medium) !important; font-size: 0.95rem; }
+.text-muted-custom a { font-weight: 600; color: var(--accent-color); }
+.text-muted-custom a:hover { color: var(--accent-color-darker); }
 
-/* --- Animations --- */
-@keyframes fadeInUp {
-    from { opacity: 0; transform: translateY(30px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-/* Keyframes for home.html are in its <style> block for now */
+/* --- Animations (As before) --- */
+@keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes fadeInDown { from { opacity: 0; transform: translateY(-30px); } to { opacity: 1; transform: translateY(0); } }
+
 
 /* --- Responsive Adjustments --- */
-@media (max-width: 991px) { /* For .navbar-expand-lg breakpoint */
-    .navbar-nav {
-        margin-top: 15px;
-        border-top: 1px solid var(--primary-color-light-transparent);
-        padding-top: 10px;
-    }
-    .navbar-custom .container {
-        flex-wrap: wrap; /* Allow navbar-brand and toggler to be on one line, nav-items on next */
-    }
-    .navbar-collapse {
-        width: 100%; /* Make collapsed menu full width */
-    }
-    .navbar-nav {
-        margin-top: 10px; /* Space above collapsed items */
-        /* border-top: 1px solid var(--primary-color-light-transparent); */ /* Optional separator */
-        /* padding-top: 10px; */
-    }
-    .nav-link-custom {
-        padding: 10px 5px !important;
-        margin-left: 0; margin-right: 0;
-        border-bottom: none;
-        display: block; /* Make full width */
-        line-height: normal; /* Reset line height for stacked items */
-    }
-    .nav-link-custom:hover,
-    .nav-link-custom.active {
-        background-color: var(--primary-color-light-transparent);
-        border-radius: 5px;
-        border-bottom: none;
-    }
-     .dropdown-menu {
-        box-shadow: none;
-        border: none;
-        background-color: transparent;
-    }
-    .dropdown-item {
-        padding-left: 20px; /* Indent dropdown items on mobile */
-    }
+@media (max-width: 991px) { /* MD breakpoint / Navbar collapse */
+    .navbar-custom .container { flex-wrap: wrap; }
+    .navbar-collapse { width: 100%; }
+    .navbar-nav { margin-top: 10px; }
+    .nav-link-custom { padding: 10px 15px !important; margin-left: 0; margin-right: 0; border-bottom: none; display: block; line-height: normal; }
+    .nav-link-custom:hover, .nav-link-custom.active { background-color: var(--primary-color-light-transparent); border-radius: 5px; border-bottom: none; }
+    .dropdown-menu { box-shadow: none; border: none; background-color: transparent; }
+    .dropdown-item { padding-left: 20px; }
+    .page-title { font-size: 2rem; margin-bottom: 1.5rem;} 
+    .table-custom-container { padding: 15px; } /* Less padding on card for tables */
 }
 
-@media (max-width: 768px) {
-    .styled-card {
-        padding: 25px 25px; /* Less padding on smaller screens */
-        margin-left: 10px;
-        margin-right: 10px;
-    }
+@media (max-width: 767px) { /* SM breakpoint */
+    /* .table-page-container padding already handled by Bootstrap .container-fluid or .container-xl logic for this size */
+    .styled-card { padding: 25px 25px; margin-left: 10px; margin-right: 10px; }
     .styled-card .card-title-custom { font-size: 1.8rem; }
-    .page-title { font-size: 2rem; margin-bottom: 2rem; }
     .btn-theme { padding: 10px 20px; font-size: 0.95rem; letter-spacing: 0.5px;}
     .btn-lg { padding: 0.8rem 1.5rem; font-size: 1rem; }
-}
-
-@media (max-width: 576px) {
-    body { padding-top: calc(var(--navbar-height) - 5px); } /* Slight adjust for smaller navbar */
-    .content-wrapper { padding-top: 1rem; padding-bottom: 1rem; }
-    .styled-card {
-        margin-top: 1rem;
-        margin-bottom: 1rem;
-        border-radius: 0; /* Full width on small screens */
-        box-shadow: none;
-        border-top-width: 3px;
-        padding: 20px 15px;
+    .table td, .table th { padding: 0.75rem 0.5rem; font-size: 0.85rem; } 
+    .page-title { font-size: 1.75rem; margin-bottom: 1.5rem;} 
+    .d-flex.justify-content-between.align-items-center { /* For table page title/button row */
+        flex-direction: column; 
+        align-items: stretch !important; 
     }
+    .d-flex.justify-content-between.align-items-center .page-title {
+        text-align: center !important; 
+        margin-bottom: 1rem !important;
+    }
+    .d-flex.justify-content-between.align-items-center .btn {
+        width: 100%; 
+    }
+}
+
+@media (max-width: 575px) { /* Extra small breakpoint */
+    body { padding-top: calc(var(--navbar-height) - 5px); } 
+    .content-wrapper, .table-page-container { 
+        padding-top: 1rem; padding-bottom: 1rem; 
+        padding-left: 10px; padding-right: 10px; 
+    }
+    .container-fluid.table-page-container { /* Reduce fluid padding further */
+        padding-left: 10px; padding-right: 10px;
+    }
+    .styled-card { margin-top: 1rem; margin-bottom: 1rem; border-radius: 0; box-shadow: none; border-top-width: 3px; padding: 20px 15px; }
     .styled-card .card-title-custom { font-size: 1.6rem; }
-    .page-title { font-size: 1.75rem; }
-    /* Specific button adjustments for very small screens if needed */
     .footer-custom { padding: 1.5rem 0; }
-}
-
-/* static/css/main.css */
-/* ... (your existing styles) ... */
-
-.custom-file-input-wrapper.dragover {
-    border-color: var(--primary-color); /* Or accent-color */
-    background-color: rgba(52, 152, 219, 0.05); /* Very light primary */
-    box-shadow: 0 0 15px rgba(52, 152, 219, 0.3); /* Subtle glow */
-}
-.custom-file-input-wrapper.dragover .file-input-label .icon,
-.custom-file-input-wrapper.dragover .file-input-label span {
-    color: var(--primary-color); /* Or accent-color */
+    .table td, .table th { font-size: 0.8rem; padding: 0.6rem 0.4rem; }
+    .table thead th { font-size: 0.75rem; padding: 0.6rem 0.4rem;}
 }

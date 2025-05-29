@@ -5,7 +5,7 @@ __pycache__/
 *.egg-info/
 *.egg
 .env
-.my_venv/
+myenv/
 venv/
 ENV/
 env/

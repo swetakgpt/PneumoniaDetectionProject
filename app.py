@@ -18,10 +18,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from functools import wraps
 from flask_wtf import CSRFProtect # For CSRF Protection
 from flask_wtf.file import FileField, FileRequired, FileAllowed # For form file validation (optional here as we do it manually)
-
-import numpy as np
-from tensorflow.keras.models import load_model
-
+import onnxruntime as ort
 # --- Configuration ---
 load_dotenv(dotenv_path="mongo_cred.env")
 
@@ -58,18 +55,26 @@ users_collection = db['users']
 medicines_collection = db['medicines']
 predictions_collection = db['predictions'] # For prediction history
 
-# # Load the pre-trained model
-# MODEL_PATH = 'model.pkl'
-# loaded_model = None
-# if os.path.exists(MODEL_PATH):
-#     try:
-#         with open(MODEL_PATH, 'rb') as file:
-#             loaded_model = pickle.load(file)
-#         print("Model loaded successfully.")
-#     except Exception as e:
-#         print(f"Error loading model.pkl: {e}")
-# else:
-#     print(f"Warning: {MODEL_PATH} not found. Prediction functionality will be unavailable.")
+ONNX_MODEL_PATH = 'pneumonia_model.onnx' # Path to your ONNX model
+ort_session = None
+onnx_input_name = None
+onnx_output_names = None
+
+if os.path.exists(ONNX_MODEL_PATH):
+    try:
+        print(f"Loading ONNX model from: {ONNX_MODEL_PATH}")
+        # Consider adding execution providers if targeting specific hardware, e.g., ['CUDAExecutionProvider', 'CPUExecutionProvider']
+        # For Render free tier, CPUExecutionProvider is appropriate.
+        ort_session = ort.InferenceSession(ONNX_MODEL_PATH, providers=['CPUExecutionProvider'])
+        onnx_input_name = ort_session.get_inputs()[0].name
+        onnx_output_names = [output.name for output in ort_session.get_outputs()]
+        print(f"ONNX model loaded. Input: {onnx_input_name}, Outputs: {onnx_output_names}")
+    except Exception as e:
+        print(f"Error loading ONNX model: {e}")
+        ort_session = None # Ensure it's None if loading failed
+else:
+    print(f"Warning: ONNX model '{ONNX_MODEL_PATH}' not found. Prediction will be unavailable.")
+
 
 
 # --- Helper Functions ---
@@ -77,58 +82,58 @@ def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
-MODEL_PATH = 'CNN_Classification_1.h5'
-loaded_model = None
-
-if os.path.exists(MODEL_PATH):
-    try:
-        loaded_model = load_model(MODEL_PATH)
-        print("Model loaded successfully from .h5 file.")
-    except Exception as e:
-        print(f"Error loading {MODEL_PATH}: {e}")
-else:
-    print(f"Warning: {MODEL_PATH} not found. Prediction functionality will be unavailable.")
-
-
+# --- Helper Functions ---
+# preprocess_image can remain largely the same, ensure output shape and type match ONNX input
 def preprocess_image(image_path):
     try:
-        img = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)  # model expects grayscale input
+        img = cv2.imread(image_path)
         if img is None:
             print(f"Warning: Could not read image at {image_path}")
             return None
-        img = cv2.resize(img, (64, 64))  # match model input size
-        img = img.astype('float32') / 255.0
-        img = np.expand_dims(img, axis=(0, -1))  # Shape: (1, 64, 64, 1)
+        img = cv2.resize(img, (224, 224))  # Must match ONNX model's expected input size
+        img = img.astype(np.float32) / 255.0
+        # ONNX model might expect (batch_size, height, width, channels) or (batch_size, channels, height, width)
+        # Your Keras model was (N, H, W, C). tf2onnx usually preserves this.
+        img = np.expand_dims(img, axis=0)  # Add batch dimension: (1, 224, 224, 3)
         return img
     except Exception as e:
         print(f"Error preprocessing image {image_path}: {e}")
         return None
 
-
+# predict_image_class needs to use ONNX Runtime
 def predict_image_class(image_path):
-    if loaded_model is None:
-        print("Model not loaded. Cannot predict.")
-        return None, None
+    if ort_session is None or onnx_input_name is None or onnx_output_names is None:
+        print("ONNX session not initialized. Cannot predict.")
+        return None, None # Or some error indicator
 
     processed_img = preprocess_image(image_path)
     if processed_img is None:
         return None, None
-
+    
     try:
-        prediction = loaded_model.predict(processed_img)
-        raw_confidence = float(prediction[0][0])  # sigmoid output
+        input_feed = {onnx_input_name: processed_img}
+        onnx_outputs = ort_session.run(onnx_output_names, input_feed)
+        
+        # Assuming your model's output is similar to Keras:
+        # onnx_outputs[0] is the first output tensor
+        # onnx_outputs[0][0] is the prediction for the first (and only) image in the batch
+        # onnx_outputs[0][0][0] if the output shape is (1,1) for binary classification
+        # Adjust based on your actual ONNX model output shape and meaning.
+        # For a binary classifier (Pneumonia vs Normal) outputting a single probability for class 1 (Pneumonia):
+        raw_prediction_value = float(onnx_outputs[0][0][0]) # Example: if output shape is (1,1)
 
-        if raw_confidence > 0.5:
+        if raw_prediction_value > 0.5:  # Threshold for Pneumonia
             predicted_class_label = "Pneumonia"
-            display_confidence = raw_confidence
+            confidence = raw_prediction_value
         else:
             predicted_class_label = "Normal"
-            display_confidence = 1.0 - raw_confidence
-
-        return predicted_class_label, display_confidence
+            confidence = 1.0 - raw_prediction_value
+        
+        return predicted_class_label, confidence
     except Exception as e:
-        print(f"Error during model prediction: {e}")
+        print(f"Error during ONNX model prediction: {e}")
         return None, None
+
 
 # --- Decorators ---
 def login_required(f):
